@@ -1,0 +1,10 @@
+JWT_SECRET = 'naRrmocnj8Qu4axPgyfrpcVRVypz85YhOvWtpNckRfK35I1LayJES0hTwz7irCbK'
+REQUEST_TIMEOUT = 43200
+
+[DB]
+[DB.HUMO]
+host = "rm-cn-pe336gflu001rn5o.rwlb.rds.aliyuncs.com"
+port = 3306
+user = "root"
+password = "ezQ8F5OgSuTHwK2W"
+database = "humo-dev"
