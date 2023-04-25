@@ -35,11 +35,20 @@ class RedisSchemas(BaseModel):
     HUMO: RedisItemSchema
 
 
+class SMTPSchema(BaseModel):
+    SENDER: str
+    PASSWORD: str
+    SMTP: str
+    SSL: int
+
+
 class ConfigSchema(BaseSettings):
+    LOCAL_HOST: str
     JWT_SECRET: str
     REQUEST_TIMEOUT: int
     DB: Optional[DBSchemas] = None
     REDIS: Optional[RedisSchemas] = None
+    SMTP: SMTPSchema
 
     class Config:
         allow_population_by_field_name = True
