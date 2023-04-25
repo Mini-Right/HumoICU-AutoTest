@@ -6,7 +6,6 @@
 # @File        : mysql_curd.py
 # @Software    : PyCharm
 # @Description :
-import logging
 import typing
 from functools import wraps
 from typing import Any, List
@@ -15,12 +14,11 @@ from sqlalchemy import distinct, exists, text
 from sqlalchemy.exc import ResourceClosedError
 from sqlalchemy.orm import Session
 
+from humo.plugins.logger import logger
 from humo.plugins.session import MySQLSession
 from humo.plugins.table_converter import (orm_fields_all_to_list, orm_fields_one_to_dict, orm_table_all_to_list, orm_table_one_to_dict)
 
 __all__ = ['HumoTableCreate', 'HumoTableUpdate', 'HumoTableRead', 'HumoTableDelete']
-
-logger = logging.getLogger(__name__)
 
 T = typing.TypeVar("T")
 
@@ -395,6 +393,3 @@ class HumoTableRead(CURDTableBase):
         table_data = self.query_sql_list(sql=SQL, is_list=True)
         options = [{'label': _.get(column), 'value': _.get(column)} for _ in table_data]
         return options
-
-
-

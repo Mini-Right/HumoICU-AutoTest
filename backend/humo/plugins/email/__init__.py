@@ -7,13 +7,10 @@
 # @Software    : PyCharm
 # @Description :
 
-import logging
-
 from yagmail import SMTP
 
 from humo.config import config
-
-logger = logging.getLogger(__name__)
+from humo.plugins.logger import logger
 
 
 class SendEmail(object):
