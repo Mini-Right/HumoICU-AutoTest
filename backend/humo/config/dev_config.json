@@ -1,0 +1,21 @@
+{
+  "JWT_SECRET": "naRrmocnj8Qu4axPgyfrpcVRVypz85YhOvWtpNckRfK35I1LayJES0hTwz7irCbK",
+  "REQUEST_TIMEOUT": 43200,
+  "DB": {
+    "HUMO": {
+      "host": "rm-cn-pe336gflu001rn5o.rwlb.rds.aliyuncs.com",
+      "port": 3306,
+      "user": "root",
+      "password": "ezQ8F5OgSuTHwK2W",
+      "database": "humo-dev"
+    }
+  },
+  "REDIS": {
+    "HUMO": {
+      "host": "r-bp1vme1xtwjkr1tw74pd.redis.rds.aliyuncs.com",
+      "port": 6379,
+      "password": "ANyu123456",
+      "db": 0
+    }
+  }
+}

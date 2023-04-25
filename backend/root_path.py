@@ -8,6 +8,8 @@
 # @Description :
 import os
 
+__all__ = ['ROOT_PATH']
+
 
 def root_path():
     return os.path.dirname(os.path.abspath(__file__))
