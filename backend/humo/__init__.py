@@ -6,12 +6,14 @@
 # @File        : __init__.py
 # @Software    : PyCharm
 # @Description :
+import uuid
 from datetime import datetime
 
 from fastapi import FastAPI, Request
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.staticfiles import StaticFiles
-
+from humo.plugins.logger.request_id import set_request_id
+from humo.apps import api
 from humo.databases.humo_api_record_table import HumoSystemAPIRecordTable
 from humo.plugins.curd import HumoTableCURD
 from root_path import ROOT_PATH
@@ -24,6 +26,8 @@ humo = FastAPI(
 )
 
 humo.mount(path='/static', app=StaticFiles(directory=f"{ROOT_PATH}/static"), name='static')
+
+humo.include_router(router=api, prefix='/api')
 
 
 @humo.get("/api/docs", include_in_schema=False)
@@ -39,6 +43,10 @@ async def custom_swagger_ui_html():
 
 @humo.middleware('http')
 async def process_timer(request: Request, call_next):
+
+    request_id = uuid.uuid4().hex
+    set_request_id(request_id)
+
     start_time = datetime.utcnow()
     # 获取请求 IP 地址
     ip_address = request.client.host
@@ -52,7 +60,7 @@ async def process_timer(request: Request, call_next):
 
     # 读取请求头和请求体
     request_headers = dict(request.headers)
-    request_body = await request.body()
+    # request_body = await request.body()
 
     # 读取用户代理和 Referrer
     user_agent = request_headers.get("User-Agent")
@@ -75,7 +83,7 @@ async def process_timer(request: Request, call_next):
         path=path,
         query_params=str(query_params),
         request_headers=str(request_headers),
-        request_body=request_body,
+        # request_body=request_body,
         user_agent=user_agent,
         referrer=referrer,
         response_status=response_status,
@@ -91,6 +99,7 @@ async def process_timer(request: Request, call_next):
     )
 
     response.headers["X-Process-Time"] = str(process_time)
+    response.headers["X-Request-ID"] = request_id
     return response
 
 

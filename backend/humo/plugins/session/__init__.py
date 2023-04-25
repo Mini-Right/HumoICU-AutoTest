@@ -18,4 +18,4 @@ class MySQLSession(object):
 
 
 class RedisSession(object):
-    pomelo: Redis = init_redis_session(config.REDIS.HUMO)
+    HUMO: Redis = init_redis_session(config.REDIS.HUMO)

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>激活您的帐户</title>
+</head>
+<body style="font-family: Arial, sans-serif; font-size: 14px;">
+<p><strong>尊敬的 {{ username }}:</strong></p>
+
+<p>感谢您注册我们的网站！为了完成注册过程，请点击以下链接以激活您的帐户：</p>
+
+<p style="margin-left: 20px;"><a href="{{ activation_link }}" style="text-decoration: none; color: #fff; background-color: #007bff; padding: 0.5rem 1rem; border-radius: 0.25rem;">立即激活帐户</a></p>
+
+<p>如果您无法通过上述链接访问到激活页面，请将以下URL复制并粘贴到浏览器地址栏中：</p>
+
+<p>{{ activation_link }}</p>
+
+<p>请注意，此链接将在24小时后失效。请于{deadline}前完成激活操作</p>
+
+<p>谢谢！</p>
+
+<p>-- HumoICU</p>
+</body>
+</html>
