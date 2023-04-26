@@ -14,7 +14,7 @@ from humo.databases import Base, gen_id
 
 
 class HumoSystemAPIRecordTable(Base):
-    __tablename__ = "humo_api_record_table"
+    __tablename__ = "humo_system_api_record"
     __table_args__ = ({'comment': '接口请求记录表'})
     # 日志记录的唯一标识符
     id = Column(String(50), default=gen_id, primary_key=True, index=True)

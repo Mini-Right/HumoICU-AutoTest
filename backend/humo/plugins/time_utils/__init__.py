@@ -109,14 +109,14 @@ def get_birthday_date(age: str, date_time: str = get_current_date()):
 
 
 def get_any_datetime(
-    date_time: Optional[str] = None,
-    year: Optional[int] = 0,
-    month: Optional[int] = 0,
-    day: Optional[int] = 0,
-    hour: Optional[int] = 0,
-    minute: Optional[int] = 0,
-    second: Optional[int] = 0,
-    format: str = DEFAULT_FORMAT,
+        date_time: Optional[str] = None,
+        year: Optional[int] = 0,
+        month: Optional[int] = 0,
+        day: Optional[int] = 0,
+        hour: Optional[int] = 0,
+        minute: Optional[int] = 0,
+        second: Optional[int] = 0,
+        format: str = DEFAULT_FORMAT,
 ) -> str:
     """
     description:  获取距离传入日期的任意偏移时间的日期时间
@@ -220,3 +220,25 @@ def cal_time(date1, date2):
     date2 = arrow.get(date2, DEFAULT_FORMAT)
     cal = date2 - date1
     return cal.seconds
+
+
+def get_seconds_until_tomorrow():
+    """计算当前时间距离第二天凌晨的秒数"""
+    # 获取当前时间
+    now = datetime.datetime.now()
+
+    # 计算当天的结束时间
+    end_of_day = datetime.datetime.combine(datetime.date.today(), datetime.time.max)
+
+    # 如果当前时间已经超过了当天的结束时间，则将结束时间加上一天，作为第二天凌晨的时间
+    if now > end_of_day:
+        end_of_day += datetime.timedelta(days=1)
+
+    # 计算当前时间与第二天凌晨的时间之间的差值，即为所求的秒数
+    seconds_until_tomorrow = (end_of_day - now).total_seconds()
+
+    return int(seconds_until_tomorrow)
+
+
+if __name__ == '__main__':
+    print(get_seconds_until_tomorrow())

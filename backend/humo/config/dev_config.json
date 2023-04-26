@@ -1,4 +1,5 @@
 {
+  "LOCAL_HOST": "http://0.0.0.0:5004",
   "JWT_SECRET": "naRrmocnj8Qu4axPgyfrpcVRVypz85YhOvWtpNckRfK35I1LayJES0hTwz7irCbK",
   "REQUEST_TIMEOUT": 43200,
   "DB": {
@@ -17,5 +18,15 @@
       "password": "ANyu123456",
       "db": 0
     }
+  },
+  "SMTP": {
+    "SENDER": "earlywarning@fireflyjk.com",
+    "PASSWORD": "PcD0So7GXwHqF5Rp",
+    "SMTP": "smtp.qiye.aliyun.com",
+    "SSL": 465
+  },
+  "ALIYUN":{
+    "AccessKeyId": "LTAI5t8GfLH1cGBbxmWfV7jN",
+    "AccessKeySecret": "8h7TwSzsJWxbrfFcPDud8VGtkGcszz"
   }
 }

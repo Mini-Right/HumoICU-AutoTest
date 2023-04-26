@@ -14,8 +14,9 @@ from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.staticfiles import StaticFiles
 from humo.plugins.logger.request_id import set_request_id
 from humo.apps import api
-from humo.databases.humo_api_record_table import HumoSystemAPIRecordTable
+from humo.databases.humo_system_api_record_table import HumoSystemAPIRecordTable
 from humo.plugins.curd import HumoTableCURD
+from humo.plugins.middlewares import middlewares
 from root_path import ROOT_PATH
 
 humo = FastAPI(
@@ -40,6 +41,8 @@ async def custom_swagger_ui_html():
         swagger_favicon_url='/static/favicon.jpeg',
     )
 
+
+middlewares(humo)
 
 @humo.middleware('http')
 async def process_timer(request: Request, call_next):

@@ -12,10 +12,15 @@ import re
 def verify_email(val: str) -> bool:
     """
     校验邮箱格式是否合法。
-    Args:
-        val (str): 待校验的邮箱地址。
-    Returns:
-        bool: 如果邮箱格式合法，返回True；否则返回False。
     """
     pattern = r'^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
-    return True if re.match(pattern, val) else False
+    return bool(re.match(pattern, val))
+
+
+def verify_mobile(val: str) -> bool:
+    """
+    校验手机号格式是否合法
+    :return:
+    """
+    pattern = r'^1[3-9]\d{9}$'
+    return bool(re.match(pattern, val))
