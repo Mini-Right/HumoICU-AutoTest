@@ -42,6 +42,11 @@ class SMTPSchema(BaseModel):
     SSL: int
 
 
+class AliYunSchema(BaseModel):
+    AccessKeyId: str
+    AccessKeySecret: str
+
+
 class ConfigSchema(BaseSettings):
     LOCAL_HOST: str
     JWT_SECRET: str
@@ -49,6 +54,7 @@ class ConfigSchema(BaseSettings):
     DB: Optional[DBSchemas] = None
     REDIS: Optional[RedisSchemas] = None
     SMTP: SMTPSchema
+    ALIYUN: AliYunSchema
 
     class Config:
         allow_population_by_field_name = True
