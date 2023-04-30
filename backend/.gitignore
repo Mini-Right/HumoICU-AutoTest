@@ -9,7 +9,7 @@ __pycache__/
 venv
 .idea
 
-
+demo.py
 # Distribution / packaging
 .Python
 build/
