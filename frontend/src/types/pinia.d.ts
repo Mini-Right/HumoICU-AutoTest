@@ -5,10 +5,10 @@
 // 用户信息
 declare interface UserInfos<T = any> {
 	authBtnList: string[];
-	photo: string;
+	avatar: string;
 	roles: string[];
 	time: number;
-	userName: string;
+	username: string;
 	[key: string]: T;
 }
 declare interface UserInfosState {

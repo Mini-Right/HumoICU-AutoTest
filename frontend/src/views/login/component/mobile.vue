@@ -1,7 +1,7 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text placeholder="请输入手机号" v-model="state.ruleForm.userName" clearable autocomplete="off">
+			<el-input text placeholder="请输入手机号" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<i class="iconfont icon-dianhua el-input__icon"></i>
 				</template>
@@ -37,7 +37,7 @@ import { reactive } from 'vue';
 // 定义变量内容
 const state = reactive({
 	ruleForm: {
-		userName: '',
+		username: '',
 		code: '',
 	},
 });

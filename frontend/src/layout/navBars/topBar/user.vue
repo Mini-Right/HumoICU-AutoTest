@@ -48,8 +48,8 @@
 		</div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="userInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				{{ userInfos.userName === '' ? 'common' : userInfos.userName }}
+				<img :src="userInfos.avatar" class="layout-navbars-breadcrumb-user-link-avatar mr5" />
+				{{ userInfos.username === '' ? 'common' : userInfos.username }}
 				<el-icon class="el-icon--right">
 					<ele-ArrowDown />
 				</el-icon>
@@ -197,7 +197,7 @@ onMounted(() => {
 		display: flex;
 		align-items: center;
 		white-space: nowrap;
-		&-photo {
+		&-avatar {
 			width: 25px;
 			height: 25px;
 			border-radius: 100%;

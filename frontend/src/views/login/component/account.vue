@@ -1,7 +1,7 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text placeholder="用户名 admin 或不输均为 common" v-model="state.ruleForm.userName" clearable autocomplete="off">
+			<el-input text placeholder="用户名 admin 或不输均为 common" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
@@ -22,21 +22,8 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation3">
-			<el-col :span="15">
-				<el-input text maxlength="4" placeholder="请输入验证码" v-model="state.ruleForm.code" clearable autocomplete="off">
-					<template #prefix>
-						<el-icon class="el-input__icon"><ele-Position /></el-icon>
-					</template>
-				</el-input>
-			</el-col>
-			<el-col :span="1"></el-col>
-			<el-col :span="8">
-				<el-button class="login-content-code" v-waves>1234</el-button>
-			</el-col>
-		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
+			<el-button type="primary" class="login-content-submit" round @click="onSignIn" :loading="state.loading.signIn">
 				<span>登 录</span>
 			</el-button>
 		</el-form-item>
@@ -47,26 +34,21 @@
 import { reactive, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import Cookies from 'js-cookie';
-import { storeToRefs } from 'pinia';
-import { useThemeConfig } from '/@/stores/themeConfig';
 import { initFrontEndControlRoutes } from '/@/router/frontEnd';
-import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
-
+import { useLoginApi } from '/@/api/login/index';
 // 定义变量内容
-const storesThemeConfig = useThemeConfig();
-const { themeConfig } = storeToRefs(storesThemeConfig);
+// const storesThemeConfig = useThemeConfig();
+// const { themeConfig } = storeToRefs(storesThemeConfig);
 const route = useRoute();
 const router = useRouter();
 const state = reactive({
 	isShowPassword: false,
 	ruleForm: {
-		userName: 'admin',
+		username: 'anyu',
 		password: '123456',
-		code: '1234',
 	},
 	loading: {
 		signIn: false,
@@ -80,22 +62,20 @@ const currentTime = computed(() => {
 // 登录
 const onSignIn = async () => {
 	state.loading.signIn = true;
-	// 存储 token 到浏览器缓存
-	Session.set('token', Math.random().toString(36).substr(0));
-	// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-	Cookies.set('userName', state.ruleForm.userName);
-	if (!themeConfig.value.isRequestRoutes) {
-		// 前端控制路由，2、请注意执行顺序
-		const isNoPower = await initFrontEndControlRoutes();
-		signInSuccess(isNoPower);
-	} else {
-		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-		const isNoPower = await initBackEndControlRoutes();
-		// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-		signInSuccess(isNoPower);
+	try {
+		const { signInAccountAPI } = useLoginApi();
+
+		const { code, data } = await signInAccountAPI(state.ruleForm);
+		if (code === 200) {
+			Session.set('token', data.token);
+			const isNoPower = await initFrontEndControlRoutes();
+			signInSuccess(isNoPower);
+		}
+	} catch (error) {
+		state.loading.signIn = false;
 	}
 };
+
 // 登录成功后的跳转
 const signInSuccess = (isNoPower: boolean | undefined) => {
 	if (isNoPower) {
