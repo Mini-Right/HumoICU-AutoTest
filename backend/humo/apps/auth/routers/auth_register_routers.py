@@ -17,11 +17,11 @@ register = APIRouter()
 
 @register.post('/mobile', name='新用户注册')
 def auth_register_mobile(data: HumoAuthMobileRegisterSchema):
-    # try:
-    HumoAuthMobileRegisterService().main(data=data)
-    return success_response(msg='用户注册成功')
-    # except Exception as e:
-    #     return fail_response(msg=str(e))
+    try:
+        HumoAuthMobileRegisterService().main(data=data)
+        return success_response(msg='用户注册成功')
+    except Exception as e:
+        return fail_response(msg=str(e))
 
 
 @register.get('/send_code', name='发送注册验证码')

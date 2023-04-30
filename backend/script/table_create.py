@@ -15,7 +15,7 @@ from root_path import ROOT_PATH
 
 def init_table():
     """创建指定表"""
-    from humo.databases.humo_api_record_table import Base
+    from humo.databases.humo_system_user_table import Base
     Base.metadata.create_all(MySQLSessionGenerate().init_engine())
 
 
@@ -34,3 +34,4 @@ def init_all_tables():
 
 if __name__ == '__main__':
     init_all_tables()
+    # init_table()

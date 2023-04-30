@@ -18,3 +18,7 @@ class Password(object):
 
     def verify_password(self, plain_password: str, hashed_password: str):
         return self.pwd_context.verify(plain_password, hashed_password)
+
+
+if __name__ == '__main__':
+    print(Password().get_password_hash('123456'))

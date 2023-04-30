@@ -14,6 +14,7 @@ from jinja2 import Template
 
 from humo.apps.auth.schemas.auth_register_schemas import HumoAuthRegisterSchema, HumoAuthEmailRegisterSchema, HumoAuthMobileRegisterSchema
 from humo.config import config
+from humo.config.redis_key import REDIS_KEY_REGISTER_SEND_CODE_COUNT, REDIS_KEY_REGISTER_MOBILE_CODE, REDIS_KEY_REGISTER_EMAIL
 from humo.databases.humo_system_user_table import HumoSystemUserTable
 from humo.plugins.crypt import Password
 from humo.plugins.curd import HumoTableCURD
@@ -58,12 +59,11 @@ class HumoAuthMobileRegisterService(HumoAuthRegisterService):
 
     def __init__(self):
         super().__init__()
-        self.redis_send_code_count_key = "register:mobile_count:{mobile}"
-        self.redis_register_key = "register:mobile:{mobile}"
 
-    def __send_code_count(self, mobile: str):
+    @staticmethod
+    def __send_code_count(mobile: str):
         """发送注册短信次数"""
-        send_code_count = RedisSession.HUMO.get(self.redis_send_code_count_key.format(mobile=mobile))
+        send_code_count = RedisSession.HUMO.get(REDIS_KEY_REGISTER_SEND_CODE_COUNT.format(mobile=mobile))
         logger.info(f"手机号当日发送注册短信次数 {mobile}: {send_code_count}")
         if send_code_count is not None and int(send_code_count) > 3:
             raise Exception('今日短信发送过多 请明日再试')
@@ -77,19 +77,20 @@ class HumoAuthMobileRegisterService(HumoAuthRegisterService):
         logger.info(f"发送注册验证码开始 {mobile}: {code}")
         HumoSMSService().send_register_sms(mobile=mobile, code=code)
         RedisSession.HUMO.set(
-            name=self.redis_register_key.format(mobile=mobile),
+            name=REDIS_KEY_REGISTER_MOBILE_CODE.format(mobile=mobile),
             value=code,
             ex=60 * 10
         )
         # 手机号发送次数计数并设置过期时间 23:9:59
-        redis_count_key = self.redis_send_code_count_key.format(mobile=mobile)
+        redis_count_key = REDIS_KEY_REGISTER_SEND_CODE_COUNT.format(mobile=mobile)
         RedisSession.HUMO.incr(name=redis_count_key)
         RedisSession.HUMO.expire(name=redis_count_key, time=get_seconds_until_tomorrow())
         logger.info(f"发送注册验证码结束 {mobile}: {code}")
 
-    def check_verification_code(self, mobile: str, code: str):
+    @staticmethod
+    def check_verification_code(mobile: str, code: str):
         """校验注册验证码"""
-        verification_code = RedisSession.HUMO.get(name=self.redis_register_key.format(mobile=mobile))
+        verification_code = RedisSession.HUMO.get(name=REDIS_KEY_REGISTER_MOBILE_CODE.format(mobile=mobile))
         if not verification_code:
             raise Exception('验证码已失效 请重试')
         if verification_code != code:
@@ -131,7 +132,7 @@ class HumoAuthEmailRegisterService(HumoAuthRegisterService):
         logger.info(f"激活链接  {user_id}: {activation_link}")
         deadline = get_any_datetime(date_time=get_current_datetime(), hour=hour)
         RedisSession.HUMO.set(
-            name=f'register:{token}',
+            name=REDIS_KEY_REGISTER_EMAIL.format(token=token),
             value=user_id,
             ex=60 * 60 * hour
         )
@@ -149,7 +150,7 @@ class HumoAuthEmailRegisterService(HumoAuthRegisterService):
 
     @staticmethod
     def active(token: str):
-        redis_key = f"register:{token}"
+        redis_key = REDIS_KEY_REGISTER_EMAIL.format(token=token)
         logger.info(f"注册用户激活 {redis_key}")
         user_id = RedisSession.HUMO.get(redis_key)
         logger.info(f"查询token对应user_id: {user_id}")
